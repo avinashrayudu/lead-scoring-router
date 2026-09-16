@@ -1,0 +1,85 @@
+# Example ICP: a retail-analytics product sold to emerging consumer brands.
+# Every number here is a lever. Change it, re-run, and compare tiers.
+
+weights:
+  fit: 0.6
+  intent: 0.4
+
+tiers:
+  fit_high: 60      # fit at or above this is a strong account
+  fit_low: 35       # below this is disqualified (tier D)
+  intent_high: 30   # intent at or above this means "act this week"
+
+fit:
+  industries:
+    Food & Beverage: 30
+    Consumer Goods: 25
+    Personal Care: 20
+    Pet Products: 20
+    Retail: 10
+  employee_bands:
+    - {min: 1, max: 10, points: 5}
+    - {min: 11, max: 50, points: 20}
+    - {min: 51, max: 500, points: 25}
+    - {min: 501, points: 10}
+  seniority:
+    c_level: 20
+    vp: 18
+    head: 15
+    director: 12
+    manager: 6
+  title_keywords:
+    sales: 10
+    revenue: 10
+    growth: 8
+    operations: 8
+    ecommerce: 6
+    marketing: 4
+  tech_stack:
+    Shopify: 8
+    Faire: 8
+    Amazon Seller Central: 5
+    HubSpot: 4
+    Salesforce: 4
+  countries:
+    allowed: [US, CA]
+    outside_penalty: -30
+  free_mail_penalty: -10
+
+intent:
+  signals:
+    demo_request: 45
+    pricing_page_visit: 25
+    webinar_attended: 15
+    new_retail_launch: 20
+    hiring_sales_ops: 20
+    funding_last_90d: 15
+    content_download: 8
+    newsletter_signup: 3
+
+enrichment:
+  # Filled cheapest provider first; stops once these are present.
+  required_fields: [industry, employees, hq_state, hq_country, tech_stack]
+  providers:
+    - name: internal_crm
+      type: csv
+      path: ../data/crm_accounts.csv
+      cost_per_call: 0.0
+      fields: [industry, employees, hq_state, hq_country, tech_stack]
+    - name: firmo_vendor
+      type: csv
+      path: ../data/vendor_firmographics.csv
+      cost_per_call: 0.04
+      fields: [industry, employees, hq_state, hq_country]
+    - name: tech_vendor
+      type: csv
+      path: ../data/vendor_technographics.csv
+      cost_per_call: 0.02
+      fields: [tech_stack]
+    # Example of a live API (disabled until you have a key):
+    # - name: pdl
+    #   type: http
+    #   base_url: https://api.example-vendor.com/v1/company
+    #   token_env: FIRMO_API_KEY
+    #   cost_per_call: 0.05
+    #   field_map: {industry: industry, employee_count: employees, region: hq_state}

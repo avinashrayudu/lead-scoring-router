@@ -1,0 +1,31 @@
+fallback_queue: unassigned
+
+reps:
+  - {name: Maya Chen, capacity: 25}
+  - {name: Luis Ortega, capacity: 25}
+  - {name: Priya Nair, capacity: 20}
+  - {name: Sam Okafor, capacity: 20}
+  - {name: Jordan Blake, capacity: 30}
+
+# Accounts that already belong to someone. Keys are domains.
+account_owners:
+  harborbrew.com: Maya Chen
+  peakpantry.com: Luis Ortega
+
+# First match wins.
+rules:
+  - name: disqualified
+    when: {tier_in: [D]}
+    queue: nurture_disqualified
+  - name: mid-market east
+    when: {tier_in: [A, B], min_employees: 51, state_in: [NY, NJ, CT, MA, PA, ME, NH, VT, RI, MD, DC, VA, NC, SC, GA, FL]}
+    pool: [Maya Chen, Luis Ortega]
+  - name: mid-market west
+    when: {tier_in: [A, B], min_employees: 51}
+    pool: [Priya Nair, Sam Okafor]
+  - name: emerging brands
+    when: {tier_in: [A, B]}
+    pool: [Jordan Blake]
+  - name: nurture
+    when: {tier_in: [C]}
+    queue: marketing_nurture
