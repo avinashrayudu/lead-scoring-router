@@ -1,0 +1,22 @@
+[project]
+name = "lead-scoring-router"
+version = "0.3.0"
+description = "Enrich, dedupe, score and route inbound and outbound leads from one config file."
+requires-python = ">=3.10"
+dependencies = ["pyyaml>=6.0"]
+
+[project.optional-dependencies]
+dev = ["pytest>=7"]
+
+[project.scripts]
+leadrouter = "leadrouter.cli:main"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["leadrouter*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
